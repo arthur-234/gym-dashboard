@@ -140,7 +140,6 @@ function calculateWorkoutStats(workouts: Workout[], exercises: Exercise[]) {
 
 export default function StatsPage() {
   const { state } = useWorkout();
-  const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<{
     weeklyData: Array<{ day: string; workouts: number; duration: number }>;
@@ -161,7 +160,6 @@ export default function StatsPage() {
       try {
         const response = await workoutService.getWorkouts();
         if (response.success && response.data) {
-          setWorkouts(response.data);
           const calculatedStats = calculateWorkoutStats(response.data, state.exercises);
           setStats(calculatedStats);
         }
@@ -350,7 +348,7 @@ export default function StatsPage() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
                       outerRadius={120}
                       fill="#8884d8"
                       dataKey="value"
