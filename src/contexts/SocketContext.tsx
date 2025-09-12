@@ -51,8 +51,32 @@ export function SocketProvider({ children }: SocketProviderProps) {
   useEffect(() => {
     if (!profile) return;
 
+    // Detectar ambiente e configurar URL do Socket.IO
+    const getSocketUrl = () => {
+      // Se há variável de ambiente definida, usar ela
+      if (process.env.NEXT_PUBLIC_SOCKET_URL) {
+        return process.env.NEXT_PUBLIC_SOCKET_URL;
+      }
+      
+      // Detectar automaticamente baseado no hostname
+      if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        
+        // Se estiver em produção (Vercel/Render)
+        if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+          return 'https://gym-dashboard-skgw.onrender.com';
+        }
+      }
+      
+      // Fallback para desenvolvimento local
+      return 'http://localhost:3001';
+    };
+
+    const socketUrl = getSocketUrl();
+    console.log('Conectando ao Socket.IO:', socketUrl);
+    
     // Conectar ao servidor Socket.IO
-    const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
+    const socketInstance = io(socketUrl, {
       auth: {
         userId: profile.id,
         username: profile.username,

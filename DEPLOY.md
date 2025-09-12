@@ -101,11 +101,20 @@ Output Directory: (auto-detectado)
 
 ### Passo 2: Variáveis de Ambiente
 
-No painel da Vercel, adicione:
+**Opção 1: Via Dashboard Vercel**
+No painel da Vercel → Settings → Environment Variables:
 
 ```env
-NEXT_PUBLIC_SOCKET_URL=https://gym-dashboard-backend.onrender.com
+NEXT_PUBLIC_SOCKET_URL=https://gym-dashboard-skgw.onrender.com
 ```
+
+**Opção 2: Via vercel.json (Automático)**
+O arquivo `vercel.json` já está configurado com as variáveis corretas.
+
+**Opção 3: Detecção Automática**
+O sistema detecta automaticamente o ambiente:
+- Desenvolvimento: `http://localhost:3001`
+- Produção: `https://gym-dashboard-skgw.onrender.com`
 
 ### Passo 3: Deploy
 
