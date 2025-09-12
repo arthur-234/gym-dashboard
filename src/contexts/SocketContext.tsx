@@ -63,9 +63,9 @@ export function SocketProvider({ children }: SocketProviderProps) {
         const hostname = window.location.hostname;
         
         // Se estiver em produção (Vercel/Render)
-        if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-          return 'https://gym-dashboard-skgw.onrender.com';
-        }
+         if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+           return 'https://gym-dashboard-882b.onrender.com';
+         }
       }
       
       // Fallback para desenvolvimento local
