@@ -38,76 +38,107 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Função para obter itens de navegação baseado no status de admin
+// Função para obter itens de navegação baseado no papel do usuário
 const getNavigationItems = (isAdmin: boolean) => {
-  const baseItems = [
-    {
-      title: "Dashboard",
-      items: [
-        {
-          title: "Visão Geral",
-          url: "/",
-          icon: Home,
-        },
-        {
-          title: "Estatísticas",
-          url: "/stats",
-          icon: BarChart3,
-        },
-      ],
-    },
-    {
-      title: "Treinos",
-      items: [
-        {
-          title: "Meus Treinos",
-          url: "/workouts",
-          icon: Dumbbell,
-        },
-        {
-          title: "Criar Treino",
-          url: "/workouts/create",
-          icon: Plus,
-        },
-        {
-          title: "Calculadoras",
-          url: "/calculators",
-          icon: Calculator,
-        },
-      ],
-    },
-    {
-      title: "Exercícios",
-      items: [
-        {
-          title: "Biblioteca",
-          url: "/exercises",
-          icon: Calendar,
-        },
-        {
-          title: "Criar Exercício",
-          url: "/exercises/create",
-          icon: Plus,
-        },
-      ],
-    },
-  ];
-
-  // Adiciona seção Administração apenas para admins
   if (isAdmin) {
-    baseItems.push({
-      title: "Administração",
-      items: [
-        {
-          title: "Painel Admin",
-          url: "/admin",
-          icon: Shield,
-        },
-      ],
-    });
+    // Personal Trainers (admins) - acesso completo
+    return [
+      {
+        title: "Dashboard",
+        items: [
+          {
+            title: "Visão Geral",
+            url: "/",
+            icon: Home,
+          },
+          {
+            title: "Estatísticas",
+            url: "/stats",
+            icon: BarChart3,
+          },
+        ],
+      },
+      {
+        title: "Treinos",
+        items: [
+          {
+            title: "Meus Treinos",
+            url: "/workouts",
+            icon: Dumbbell,
+          },
+          {
+            title: "Criar Treino",
+            url: "/workouts/create",
+            icon: Plus,
+          },
+          {
+            title: "Calculadoras",
+            url: "/calculators",
+            icon: Calculator,
+          },
+        ],
+      },
+      {
+        title: "Exercícios",
+        items: [
+          {
+            title: "Biblioteca",
+            url: "/exercises",
+            icon: Calendar,
+          },
+          {
+            title: "Criar Exercício",
+            url: "/exercises/create",
+            icon: Plus,
+          },
+        ],
+      },
+      {
+        title: "Administração",
+        items: [
+          {
+            title: "Painel Personal",
+            url: "/admin",
+            icon: Shield,
+          },
+        ],
+      },
+    ];
+  } else {
+    // Alunos (users) - acesso limitado
+    return [
+      {
+        title: "Dashboard",
+        items: [
+          {
+            title: "Visão Geral",
+            url: "/",
+            icon: Home,
+          },
+          {
+            title: "Estatísticas",
+            url: "/stats",
+            icon: BarChart3,
+          },
+        ],
+      },
+      {
+        title: "Treinos",
+        items: [
+          {
+            title: "Meus Treinos",
+            url: "/workouts",
+            icon: Dumbbell,
+          },
+          {
+            title: "Calculadoras",
+            url: "/calculators",
+            icon: Calculator,
+          },
+        ],
+      },
+    ];
   }
-
-  return baseItems;
 };
 
 export function AppSidebar() {

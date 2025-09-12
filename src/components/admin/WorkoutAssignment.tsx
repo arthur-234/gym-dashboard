@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Trash2, Plus, User, Dumbbell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useWorkout } from '@/contexts/WorkoutContext';
+import { useSocket } from '@/contexts/SocketContext';
+import { userService, UserProfile } from '@/services/userService';
 import { Workout } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -23,43 +25,27 @@ interface UserWorkoutAssignment {
   status: 'active' | 'completed' | 'paused';
 }
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
+// Removendo interface User duplicada - usando UserProfile do userService
 
 // Dados removidos - agora usando dados reais do contexto e localStorage
 
 export default function WorkoutAssignment() {
   const { profile } = useAuth();
   const { state } = useWorkout();
+  const { sendMessage } = useSocket();
   const [assignments, setAssignments] = useState<UserWorkoutAssignment[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [selectedWorkout, setSelectedWorkout] = useState<string>('');
   const [searchUser, setSearchUser] = useState('');
   const [searchWorkout, setSearchWorkout] = useState('');
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
 
-  // Carregar dados do localStorage
+  // Carregar dados do userService
   useEffect(() => {
-    // Carregar usuários registrados
-    const storedUsers = localStorage.getItem('registeredUsers');
-    if (storedUsers) {
-      const parsedUsers = JSON.parse(storedUsers);
-      setUsers(parsedUsers);
-      console.log('Usuários carregados:', parsedUsers); // Debug
-    } else {
-      console.log('Nenhum usuário encontrado no localStorage'); // Debug
-      // Adicionar alguns usuários de exemplo para teste
-      const exampleUsers = [
-        { id: 'user1', name: 'João Silva', email: 'joao@email.com' },
-        { id: 'user2', name: 'Maria Santos', email: 'maria@email.com' },
-        { id: 'user3', name: 'Pedro Costa', email: 'pedro@email.com' }
-      ];
-      setUsers(exampleUsers);
-      localStorage.setItem('registeredUsers', JSON.stringify(exampleUsers));
-    }
+    // Carregar todos os usuários (alunos e personal trainers)
+    const allUsers = userService.getAllUsers();
+    setUsers(allUsers);
+    console.log('Usuários carregados do userService:', allUsers);
     
     // Carregar atribuições
     const storedAssignments = localStorage.getItem('workoutAssignments');
@@ -103,7 +89,7 @@ export default function WorkoutAssignment() {
     const newAssignment: UserWorkoutAssignment = {
       id: Date.now().toString(),
       userId: user.id,
-      userName: user.name,
+      userName: user.displayName,
       workoutId: workout.id,
       workoutName: workout.name,
       assignedAt: new Date(),
@@ -118,10 +104,21 @@ export default function WorkoutAssignment() {
     const updatedAssignments = [...currentAssignments, workout.id];
     localStorage.setItem(`assignedWorkouts_${user.id}`, JSON.stringify(updatedAssignments));
     
+    // Enviar notificação via Socket.IO
+    sendMessage('workout_assigned', {
+      studentId: user.id,
+      studentName: user.displayName,
+      workoutId: workout.id,
+      workoutName: workout.name,
+      personalId: profile?.id,
+      personalName: profile?.displayName
+    });
+    
     setSelectedUser('');
     setSelectedWorkout('');
     
-    toast.success(`Treino "${workout.name}" atribuído a ${user.name}`);
+    const roleText = user.role === 'admin' ? 'Personal Trainer' : 'Aluno';
+    toast.success(`Treino "${workout.name}" atribuído ao ${roleText} ${user.displayName}`);
   };
 
   const handleRemoveAssignment = (assignmentId: string) => {
@@ -150,7 +147,8 @@ export default function WorkoutAssignment() {
   };
 
   const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchUser.toLowerCase())
+    user.displayName.toLowerCase().includes(searchUser.toLowerCase()) ||
+    user.username.toLowerCase().includes(searchUser.toLowerCase())
   );
   
   // Debug logs
@@ -205,12 +203,15 @@ export default function WorkoutAssignment() {
                     {filteredUsers.length > 0 ? (
                       filteredUsers.map(user => (
                         <SelectItem key={user.id} value={user.id}>
-                          <div className="flex items-center gap-2">
-                            <User className="h-4 w-4" />
-                            <span>{user.name}</span>
-                            <span className="text-sm text-muted-foreground">({user.email})</span>
-                          </div>
-                        </SelectItem>
+                           <div className="flex items-center gap-2">
+                             <User className="h-4 w-4" />
+                             <span>{user.displayName}</span>
+                             <Badge variant={user.role === 'admin' ? 'default' : 'secondary'} className="text-xs">
+                               {user.role === 'admin' ? 'Personal' : 'Aluno'}
+                             </Badge>
+                             <span className="text-sm text-muted-foreground">({user.email})</span>
+                           </div>
+                         </SelectItem>
                       ))
                     ) : (
                       <div className="p-2 text-sm text-muted-foreground text-center">

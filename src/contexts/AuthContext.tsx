@@ -2,6 +2,8 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { LocalAuth, User } from '@/lib/auth'
+import { userService, UserProfile as UserData } from '@/services/userService'
+import toast from 'react-hot-toast'
 
 interface UserProfile {
   id: string
@@ -31,7 +33,7 @@ interface AuthContextType {
   profile: UserProfile | null
   loading: boolean
   signIn: (username: string, password: string) => Promise<void>
-  signUp: (username: string, password: string, displayName: string) => Promise<void>
+  signUp: (username: string, password: string, displayName: string, role?: 'admin' | 'user') => Promise<void>
   signOut: () => Promise<void>
   updateUserProfile: (updates: Partial<UserProfile>) => Promise<void>
   resetPassword: (token: string, newPassword: string) => Promise<void>
@@ -89,23 +91,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const signUp = async (username: string, password: string, displayName: string) => {
+  const signUp = async (username: string, password: string, displayName: string, role: 'admin' | 'user' = 'user') => {
     try {
       const user = await LocalAuth.signUp(username, password, displayName)
       setUser(user)
       const userProfile = await createUserProfile(user)
       setProfile(userProfile)
       
-      // Salvar usuário na lista de usuários registrados
-      const storedUsers = localStorage.getItem('registeredUsers')
-      const users = storedUsers ? JSON.parse(storedUsers) : []
-      const newUser = {
-        id: user.id,
-        name: displayName,
-        email: user.username // Usando username como email
+      // Adicionar usuário ao banco de dados JSON
+      const userData: Omit<UserData, 'id' | 'createdAt' | 'lastLogin'> = {
+        username,
+        displayName,
+        email: user.username,
+        role,
+        status: 'active',
+        profile: role === 'admin' ? {
+          phone: '',
+          specialties: [],
+          experience: ''
+        } : {
+          age: 0,
+          weight: 0,
+          height: 0,
+          goal: '',
+          personalTrainerId: undefined
+        },
+        stats: role === 'admin' ? {
+          studentsCount: 0,
+          workoutsCreated: 0,
+          totalSessions: 0
+        } : {
+          workoutsCompleted: 0,
+          totalCalories: 0,
+          currentStreak: 0,
+          longestStreak: 0
+        }
       }
-      users.push(newUser)
-      localStorage.setItem('registeredUsers', JSON.stringify(users))
+      
+      userService.addUser(userData)
+      
+      const roleText = role === 'admin' ? 'Personal Trainer' : 'Aluno'
+      toast.success(`${roleText} ${displayName} registrado com sucesso!`)
     } catch (error) {
       console.error('Erro no registro:', error)
       throw error

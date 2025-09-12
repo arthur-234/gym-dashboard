@@ -159,7 +159,9 @@ export default function WorkoutsPage() {
               </h3>
               <p className="text-muted-foreground mb-6">
                 {state.workouts.length === 0 
-                  ? 'Comece criando seu primeiro treino personalizado'
+                  ? (isAdmin 
+                      ? 'Comece criando seu primeiro treino personalizado' 
+                      : 'Nenhum treino foi atribuído a você ainda. Entre em contato com seu Personal Trainer.')
                   : 'Tente ajustar os filtros de busca'
                 }
               </p>
