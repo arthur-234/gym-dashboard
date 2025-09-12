@@ -28,56 +28,9 @@ interface User {
 }
 
 // Mock data - em produção viria de uma API
-const mockUsers: User[] = [
-  { id: '1', name: 'João Silva', email: 'joao@email.com' },
-  { id: '2', name: 'Maria Santos', email: 'maria@email.com' },
-  { id: '3', name: 'Pedro Costa', email: 'pedro@email.com' },
-  { id: '4', name: 'Ana Oliveira', email: 'ana@email.com' },
-  { id: '5', name: 'Carlos Ferreira', email: 'carlos@email.com' }
-];
+const mockUsers: User[] = [];
 
-const mockWorkouts: Workout[] = [
-  {
-    id: '1',
-    name: 'Treino Push (Peito, Ombro, Tríceps)',
-    description: 'Treino focado em músculos de empurrar',
-    exercises: [],
-    difficulty: 'intermediate',
-    estimatedDuration: 60,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '2',
-    name: 'Treino Pull (Costas, Bíceps)',
-    description: 'Treino focado em músculos de puxar',
-    exercises: [],
-    difficulty: 'intermediate',
-    estimatedDuration: 55,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '3',
-    name: 'Treino Legs (Pernas)',
-    description: 'Treino completo de pernas',
-    exercises: [],
-    difficulty: 'advanced',
-    estimatedDuration: 70,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: '4',
-    name: 'Treino Cardio HIIT',
-    description: 'Treino cardiovascular de alta intensidade',
-    exercises: [],
-    difficulty: 'intermediate',
-    estimatedDuration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-];
+const mockWorkouts: Workout[] = [];
 
 export default function WorkoutAssignment() {
   const { profile } = useAuth();
@@ -89,35 +42,7 @@ export default function WorkoutAssignment() {
 
   // Mock assignments - em produção viria de uma API
   useEffect(() => {
-    const mockAssignments: UserWorkoutAssignment[] = [
-      {
-        id: '1',
-        userId: '1',
-        userName: 'João Silva',
-        workoutId: '1',
-        workoutName: 'Treino Push (Peito, Ombro, Tríceps)',
-        assignedAt: new Date('2024-01-15'),
-        status: 'active'
-      },
-      {
-        id: '2',
-        userId: '2',
-        userName: 'Maria Santos',
-        workoutId: '2',
-        workoutName: 'Treino Pull (Costas, Bíceps)',
-        assignedAt: new Date('2024-01-16'),
-        status: 'active'
-      },
-      {
-        id: '3',
-        userId: '1',
-        userName: 'João Silva',
-        workoutId: '3',
-        workoutName: 'Treino Legs (Pernas)',
-        assignedAt: new Date('2024-01-17'),
-        status: 'completed'
-      }
-    ];
+    const mockAssignments: UserWorkoutAssignment[] = [];
     setAssignments(mockAssignments);
   }, []);
 

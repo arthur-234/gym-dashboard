@@ -53,69 +53,9 @@ interface User {
 }
 
 export default function AdminPage() {
-  const [exercises, setExercises] = useState<Exercise[]>([
-    {
-      id: '1',
-      name: 'Supino Reto',
-      category: 'Peito',
-      muscle: 'Peitoral Maior',
-      difficulty: 'Intermediário',
-      equipment: 'Barra',
-      instructions: [
-        'Deite-se no banco com os pés firmes no chão',
-        'Segure a barra com pegada pronada, mãos afastadas na largura dos ombros',
-        'Desça a barra controladamente até tocar o peito',
-        'Empurre a barra de volta à posição inicial'
-      ],
-      tips: [
-        'Mantenha os ombros retraídos durante todo o movimento',
-        'Não deixe a barra quicar no peito',
-        'Expire ao empurrar a barra para cima'
-      ]
-    },
-    {
-      id: '2',
-      name: 'Agachamento Livre',
-      category: 'Pernas',
-      muscle: 'Quadríceps',
-      difficulty: 'Intermediário',
-      equipment: 'Barra',
-      instructions: [
-        'Posicione a barra nas costas, apoiada no trapézio',
-        'Mantenha os pés afastados na largura dos ombros',
-        'Desça flexionando quadris e joelhos simultaneamente',
-        'Suba retornando à posição inicial'
-      ],
-      tips: [
-        'Mantenha o peito erguido e olhar para frente',
-        'Não deixe os joelhos ultrapassarem a linha dos pés',
-        'Desça até as coxas ficarem paralelas ao chão'
-      ]
-    }
-  ])
+  const [exercises, setExercises] = useState<Exercise[]>([])
 
-  const [users, setUsers] = useState<User[]>([
-    {
-      id: '1',
-      name: 'João Silva',
-      email: 'joao@email.com',
-      role: 'user',
-      status: 'active',
-      joinDate: '2024-01-15',
-      lastLogin: '2024-01-20',
-      workoutsCompleted: 45
-    },
-    {
-      id: '2',
-      name: 'Maria Santos',
-      email: 'maria@email.com',
-      role: 'user',
-      status: 'active',
-      joinDate: '2024-01-10',
-      lastLogin: '2024-01-19',
-      workoutsCompleted: 32
-    }
-  ])
+  const [users, setUsers] = useState<User[]>([])
 
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
