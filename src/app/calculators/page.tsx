@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Calculator, Scale, Activity, Target, TrendingUp, AlertCircle, Utensils, Apple } from "lucide-react";
+import { Calculator, Scale, Activity, Target, Utensils, Apple } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -22,6 +22,27 @@ interface IMCResult {
   recommendations: string[];
 }
 
+interface DietPlan {
+  targetCalories: number;
+  goalDescription: string;
+  macros: {
+    protein: number;
+    carbs: number;
+    fats: number;
+  };
+  meals: {
+    breakfast: number;
+    snack1: number;
+    lunch: number;
+    snack2: number;
+    dinner: number;
+  };
+  recommendations: string[];
+  foods: string[];
+}
+
+type ActivityLevel = 'sedentary' | 'lightly_active' | 'moderately_active' | 'very_active' | 'extremely_active';
+
 export default function CalculatorsPage() {
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
@@ -32,7 +53,7 @@ export default function CalculatorsPage() {
   const [bmr, setBmr] = useState<number | null>(null);
   const [tdee, setTdee] = useState<number | null>(null);
   const [goal, setGoal] = useState('');
-  const [dietPlan, setDietPlan] = useState<any>(null);
+  const [dietPlan, setDietPlan] = useState<DietPlan | null>(null);
 
   const calculateIMC = () => {
     if (!height || !weight) return;
@@ -132,15 +153,15 @@ export default function CalculatorsPage() {
     
     // Calcular TDEE se nível de atividade estiver selecionado
     if (activityLevel) {
-      const activityMultipliers: Record<string, number> = {
+      const activityMultipliers: Record<ActivityLevel, number> = {
         'sedentary': 1.2,
-        'light': 1.375,
-        'moderate': 1.55,
-        'active': 1.725,
-        'very_active': 1.9
+        'lightly_active': 1.375,
+        'moderately_active': 1.55,
+        'very_active': 1.725,
+        'extremely_active': 1.9
       };
       
-      const tdeeValue = bmrValue * activityMultipliers[activityLevel];
+      const tdeeValue = bmrValue * activityMultipliers[activityLevel as ActivityLevel];
       setTdee(tdeeValue);
     }
   };
@@ -185,8 +206,8 @@ export default function CalculatorsPage() {
     };
     
     // Recomendações específicas por objetivo
-    let recommendations = [];
-    let foods = [];
+    let recommendations: string[] = [];
+    let foods: string[] = [];
     
     if (goal === 'lose_weight') {
       recommendations = [

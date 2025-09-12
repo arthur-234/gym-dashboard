@@ -41,7 +41,7 @@ export default function CreateWorkoutPage() {
 
   useEffect(() => {
     loadExercises();
-  }, [loadExercises]);
+  }, [loadExercises, state.exercises]);
 
   // Filtrar exercícios disponíveis
   const filteredExercises = state.exercises.filter(exercise => {
