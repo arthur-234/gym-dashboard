@@ -49,7 +49,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
   useEffect(() => {
     if (!profile) return;
 
-    // Conectar ao servidor Socket.IO na Render
+    // Conectar ao servidor Socket.IO
     const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
       auth: {
         userId: profile.id,
@@ -58,7 +58,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
         displayName: profile.displayName
       },
       transports: ['websocket', 'polling'],
-      autoConnect: false
+      autoConnect: true
     });
 
     // Eventos de conexão
@@ -132,13 +132,6 @@ export function SocketProvider({ children }: SocketProviderProps) {
     });
 
     setSocket(socketInstance);
-
-    // Tentar conectar (pode falhar se servidor não estiver rodando)
-    try {
-      socketInstance.connect();
-    } catch {
-      console.log('Servidor Socket.IO não disponível');
-    }
 
     return () => {
       socketInstance.disconnect();
