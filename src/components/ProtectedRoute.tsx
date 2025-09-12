@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Loader2 } from 'lucide-react'
 
@@ -13,20 +13,24 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
   const { user, profile, loading } = useAuth()
   const router = useRouter()
+  const pathname = usePathname()
+  const [hasRedirected, setHasRedirected] = useState(false)
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
+    if (!loading && !hasRedirected) {
+      if (!user && pathname !== '/login') {
+        setHasRedirected(true)
         router.push('/login')
         return
       }
 
-      if (requireAdmin && profile?.role !== 'admin') {
+      if (requireAdmin && profile?.role !== 'admin' && pathname !== '/') {
+        setHasRedirected(true)
         router.push('/')
         return
       }
     }
-  }, [user, profile, loading, router, requireAdmin])
+  }, [user, profile, loading, router, requireAdmin, pathname, hasRedirected])
 
   if (loading) {
     return (

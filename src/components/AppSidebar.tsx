@@ -155,7 +155,7 @@ export function AppSidebar() {
   const displayUser = {
     name: profile?.displayName || user?.username || 'Usuário',
     email: profile?.email || 'usuario@exemplo.com',
-    avatar: '/avatars/01.png',
+    avatar: '/avatars/01.svg',
   };
 
   return (

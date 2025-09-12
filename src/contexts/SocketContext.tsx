@@ -49,16 +49,16 @@ export function SocketProvider({ children }: SocketProviderProps) {
   useEffect(() => {
     if (!profile) return;
 
-    // Conectar ao servidor Socket.IO (quando implementado)
-    // Por enquanto, simular conexão local
-    const socketInstance = io('http://localhost:3001', {
+    // Conectar ao servidor Socket.IO na Render
+    const socketInstance = io(process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001', {
       auth: {
         userId: profile.id,
         username: profile.username,
         role: profile.role,
         displayName: profile.displayName
       },
-      autoConnect: false // Conectar manualmente
+      transports: ['websocket', 'polling'],
+      autoConnect: false
     });
 
     // Eventos de conexão
@@ -136,7 +136,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     // Tentar conectar (pode falhar se servidor não estiver rodando)
     try {
       socketInstance.connect();
-    } catch (error) {
+    } catch {
       console.log('Servidor Socket.IO não disponível');
     }
 

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gym-dashboard-backend
+    env: node
+    plan: free
+    buildCommand: curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH" && bun install
+    startCommand: export PATH="$HOME/.bun/bin:$PATH" && bun run server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: gym-dashboard-backend
+          property: port
+    healthCheckPath: /health
+    autoDeploy: true
+    branch: main
+    rootDir: server

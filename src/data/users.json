@@ -1,77 +1,10 @@
 {
-  "users": [
-    {
-      "id": "admin1",
-      "username": "personal1",
-      "displayName": "Personal Trainer 1",
-      "email": "personal1@gym.com",
-      "role": "admin",
-      "status": "active",
-      "createdAt": "2024-01-01T00:00:00.000Z",
-      "lastLogin": "2024-01-20T10:00:00.000Z",
-      "profile": {
-        "phone": "+55 11 99999-9999",
-        "specialties": ["Musculação", "Funcional", "Cardio"],
-        "experience": "5 anos"
-      },
-      "stats": {
-        "studentsCount": 0,
-        "workoutsCreated": 0,
-        "totalSessions": 0
-      }
-    },
-    {
-      "id": "user1",
-      "username": "aluno1",
-      "displayName": "João Silva",
-      "email": "joao@email.com",
-      "role": "user",
-      "status": "active",
-      "createdAt": "2024-01-15T00:00:00.000Z",
-      "lastLogin": "2024-01-20T09:00:00.000Z",
-      "profile": {
-        "age": 25,
-        "weight": 75,
-        "height": 175,
-        "goal": "Ganho de massa muscular",
-        "personalTrainerId": "admin1"
-      },
-      "stats": {
-        "workoutsCompleted": 0,
-        "totalCalories": 0,
-        "currentStreak": 0,
-        "longestStreak": 0
-      }
-    },
-    {
-      "id": "user2",
-      "username": "aluno2",
-      "displayName": "Maria Santos",
-      "email": "maria@email.com",
-      "role": "user",
-      "status": "active",
-      "createdAt": "2024-01-10T00:00:00.000Z",
-      "lastLogin": "2024-01-19T18:00:00.000Z",
-      "profile": {
-        "age": 30,
-        "weight": 65,
-        "height": 165,
-        "goal": "Perda de peso",
-        "personalTrainerId": "admin1"
-      },
-      "stats": {
-        "workoutsCompleted": 0,
-        "totalCalories": 0,
-        "currentStreak": 0,
-        "longestStreak": 0
-      }
-    }
-  ],
+  "users": [],
   "metadata": {
     "version": "1.0.0",
     "lastUpdated": "2024-01-20T10:00:00.000Z",
-    "totalUsers": 3,
-    "totalPersonals": 1,
-    "totalStudents": 2
+    "totalUsers": 0,
+    "totalPersonals": 0,
+    "totalStudents": 0
   }
 }

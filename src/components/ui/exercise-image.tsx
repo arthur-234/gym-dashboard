@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, Play, Image as ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from './button';
 
 interface ExerciseImageProps {
@@ -102,11 +103,12 @@ export function ExerciseImage({
           {/* Imagem */}
           {currentImage && !imageError ? (
             <>
-              <img
+              <Image
                 src={currentImage}
                 alt={alt}
+                fill
                 className={cn(
-                  'w-full h-full object-cover transition-opacity duration-200',
+                  'object-cover transition-opacity duration-200',
                   isLoading && 'opacity-0'
                 )}
                 onLoad={handleImageLoad}

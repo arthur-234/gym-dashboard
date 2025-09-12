@@ -7,7 +7,8 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent } from '@/components/ui/card'
-import { Upload, X, Image, Video, CheckCircle } from 'lucide-react'
+import { Upload, X, Image as ImageIcon, Video, CheckCircle } from 'lucide-react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 interface FileUploadProps {
@@ -212,7 +213,7 @@ export default function FileUpload({
                 onClick={() => imageInputRef.current?.click()}
                 disabled={!!uploadedFiles.image}
               >
-                <Image className="h-4 w-4 mr-2" />
+                <ImageIcon className="h-4 w-4 mr-2" />
                 Selecionar Imagem
               </Button>
               <Input
@@ -260,7 +261,7 @@ export default function FileUpload({
                 <CardContent className="p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Image className="h-4 w-4" />
+                      <ImageIcon className="h-4 w-4" />
                       <span className="text-sm">Imagem atual</span>
                     </div>
                     <Button
@@ -310,7 +311,7 @@ export default function FileUpload({
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Image className="h-4 w-4" />
+                        <ImageIcon className="h-4 w-4" />
                         <span className="text-sm font-medium">{uploadedFiles.image.file.name}</span>
                         {uploadedFiles.image.uploaded && (
                           <CheckCircle className="h-4 w-4 text-green-500" />
@@ -335,9 +336,11 @@ export default function FileUpload({
                     )}
                     {uploadedFiles.image.preview && (
                       <div className="mt-2">
-                        <img
+                        <Image
                           src={uploadedFiles.image.preview}
-                          alt="Preview"
+                          alt="Preview da imagem selecionada"
+                          width={400}
+                          height={128}
                           className="w-full h-32 object-cover rounded border"
                         />
                       </div>
