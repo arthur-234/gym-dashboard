@@ -23,10 +23,12 @@ import {
   Shield,
   Clock,
   CheckCircle,
-  Calendar
+  Calendar,
+  Wifi
 } from 'lucide-react'
 import WorkoutAssignment from '@/components/admin/WorkoutAssignment'
 import { AppLayout } from '@/components/AppLayout'
+import { useSocket } from '@/contexts/SocketContext'
 
 interface Exercise {
   id: string
@@ -53,6 +55,7 @@ interface User {
 }
 
 export default function AdminPage() {
+  const { onlineUsers } = useSocket()
   const [exercises, setExercises] = useState<Exercise[]>([])
 
   const [users, setUsers] = useState<User[]>([])
@@ -201,7 +204,7 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="exercises" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="exercises" className="flex items-center gap-2">
               <Dumbbell className="h-4 w-4" />
               Exercícios
@@ -209,6 +212,10 @@ export default function AdminPage() {
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Usuários
+            </TabsTrigger>
+            <TabsTrigger value="online" className="flex items-center gap-2">
+              <Wifi className="h-4 w-4" />
+              Online ({onlineUsers.length})
             </TabsTrigger>
             <TabsTrigger value="workouts" className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
@@ -545,6 +552,57 @@ export default function AdminPage() {
                     </Card>
                   ))}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="online" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Wifi className="h-5 w-5" />
+                  Usuários Conectados ({onlineUsers.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {onlineUsers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Wifi className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Nenhum usuário conectado no momento</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-4">
+                    {onlineUsers.map((user) => (
+                      <Card key={user.id}>
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between">
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                <h3 className="font-semibold">{user.displayName || user.username}</h3>
+                                <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                                  {user.role === 'admin' ? 'Admin' : 'Usuário'}
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-muted-foreground">ID: {user.userId}</p>
+                              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="h-4 w-4" />
+                                  Conectado desde {new Date(user.connectedAt).toLocaleTimeString('pt-BR')}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex gap-2">
+                              <Badge variant="outline" className="text-green-600 border-green-600">
+                                Online
+                              </Badge>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
