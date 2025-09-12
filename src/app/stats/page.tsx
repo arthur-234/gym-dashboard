@@ -142,15 +142,17 @@ export default function StatsPage() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<{
-    totalWorkouts: number;
-    totalExercises: number;
-    totalSets: number;
-    totalWeight: number;
-    averageDuration: number;
     weeklyData: Array<{ day: string; workouts: number; duration: number }>;
-    monthlyData: Array<{ week: string; workouts: number; duration: number }>;
+    monthlyData: Array<{ month: string; workouts: number; weight: number }>;
     muscleGroupData: Array<{ name: string; value: number; color: string }>;
-    favoriteExercises: Array<{ name: string; count: number }>;
+    achievements: Array<{ title: string; description: string; completed: boolean; progress: number }>;
+    stats: {
+      totalWorkouts: number;
+      weeklyWorkouts: number;
+      monthlyWorkouts: number;
+      totalDuration: number;
+      averageDuration: number;
+    };
   } | null>(null);
 
   useEffect(() => {
