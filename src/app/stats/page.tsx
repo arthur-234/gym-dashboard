@@ -4,14 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CalendarDays, TrendingUp, Target, Zap, Clock, Trophy, Activity, BarChart3 } from "lucide-react";
+import { CalendarDays, Target, Zap, Clock, Trophy, Activity } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { AppLayout } from "@/components/AppLayout";
-import { useAuth } from "@/contexts/AuthContext";
+
 import { useWorkout } from "@/contexts/WorkoutContext";
 import { useEffect, useState } from "react";
 import { workoutService } from "@/services/workoutService";
-import { Workout } from "@/types";
+import { Workout, Exercise } from "@/types";
 import { normalizeMuscleGroup, MUSCLE_GROUP_COLORS } from "@/constants/muscleGroups";
 
 // Função para calcular estatísticas dos treinos
@@ -138,11 +138,20 @@ function calculateWorkoutStats(workouts: Workout[], exercises: Exercise[]) {
 }
 
 export default function StatsPage() {
-  const { profile } = useAuth();
   const { state } = useWorkout();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<{
+    totalWorkouts: number;
+    totalExercises: number;
+    totalSets: number;
+    totalWeight: number;
+    averageDuration: number;
+    weeklyData: Array<{ day: string; workouts: number; duration: number }>;
+    monthlyData: Array<{ week: string; workouts: number; duration: number }>;
+    muscleGroupData: Array<{ name: string; value: number; color: string }>;
+    favoriteExercises: Array<{ name: string; count: number }>;
+  } | null>(null);
 
   useEffect(() => {
     const loadWorkouts = async () => {
@@ -161,7 +170,7 @@ export default function StatsPage() {
     };
 
     loadWorkouts();
-  }, []);
+  }, [state.exercises]);
 
   if (loading) {
     return (
@@ -338,7 +347,7 @@ export default function StatsPage() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
                       outerRadius={120}
                       fill="#8884d8"
                       dataKey="value"

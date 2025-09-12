@@ -114,7 +114,7 @@ export function AppLayout({ children }: AppLayoutProps) {
                       Dashboard
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                  {breadcrumbs.map((breadcrumb, index) => (
+                  {breadcrumbs.map((breadcrumb) => (
                     <div key={breadcrumb.href} className="flex items-center gap-2">
                       <BreadcrumbSeparator className="hidden md:block" />
                       <BreadcrumbItem>

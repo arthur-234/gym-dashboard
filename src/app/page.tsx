@@ -3,16 +3,14 @@
 import { AppLayout } from "@/components/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Dumbbell, Target, TrendingUp, Calendar, Clock, User } from "lucide-react";
+import { Plus, Dumbbell, Target, TrendingUp, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 import { useWorkout } from "@/contexts/WorkoutContext";
-import { useAuth } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useEffect } from "react";
 
 export default function Home() {
   const { state, loadWorkouts, loadExercises } = useWorkout();
-  const { user, profile } = useAuth();
   
   useEffect(() => {
     loadWorkouts();

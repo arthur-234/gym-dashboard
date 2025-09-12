@@ -22,7 +22,8 @@ import {
   Search,
   Shield,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Calendar
 } from 'lucide-react'
 import WorkoutAssignment from '@/components/admin/WorkoutAssignment'
 import { AppLayout } from '@/components/AppLayout'

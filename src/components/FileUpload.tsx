@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent } from '@/components/ui/card'
-import { Upload, X, Image, Video, FileText, CheckCircle } from 'lucide-react'
+import { Upload, X, Image, Video, CheckCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FileUploadProps {

@@ -8,7 +8,7 @@ import { AppLayout } from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+
 import { ArrowLeft, Edit, Trash2, Dumbbell, Target, Zap, Clock } from 'lucide-react';
 import Link from 'next/link';
 

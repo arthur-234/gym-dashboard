@@ -16,7 +16,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Exercise, WorkoutExercise, WorkoutSet } from "@/types";
-import { MUSCLE_GROUP_OPTIONS, getUniqueMuscleGroups, normalizeMuscleGroup } from "@/constants/muscleGroups";
+import { MUSCLE_GROUP_OPTIONS, normalizeMuscleGroup } from "@/constants/muscleGroups";
 
 interface WorkoutForm {
   name: string;
@@ -56,8 +56,7 @@ export default function CreateWorkoutPage() {
     return matchesSearch && matchesCategory && notSelected;
   });
 
-  // Grupos musculares únicos dos exercícios
-  const categories = getUniqueMuscleGroups(state.exercises);
+
 
   const addExerciseToWorkout = (exercise: Exercise) => {
     const timestamp = Date.now();

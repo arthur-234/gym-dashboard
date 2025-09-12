@@ -4,7 +4,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Play, Edit, Trash2, Clock, Target, Dumbbell, Plus, Minus, Check, X, Loader2 } from "lucide-react";
@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useWorkout } from "@/contexts/WorkoutContext";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Workout, WorkoutExercise } from "@/types";
+import { Workout } from "@/types";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -89,13 +89,12 @@ export default function WorkoutDetailPage() {
     if (!workout || !startTime) return;
     
     const endTime = new Date();
-    const duration = Math.floor((endTime.getTime() - startTime.getTime()) / 1000);
     
     // Atualizar estatísticas do treino
     const updatedWorkout = {
       ...workout,
       lastPerformed: endTime,
-      totalSessions: ((workout as any).totalSessions || 0) + 1
+      totalSessions: ((workout as Workout & { totalSessions?: number }).totalSessions || 0) + 1
     };
     
     updateWorkout(updatedWorkout);

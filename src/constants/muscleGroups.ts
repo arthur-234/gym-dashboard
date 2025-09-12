@@ -97,7 +97,7 @@ export function normalizeMuscleGroup(muscleGroup: string): string {
 }
 
 // Função para obter grupos musculares únicos de uma lista de exercícios
-export function getUniqueMuscleGroups(exercises: any[]): string[] {
+export function getUniqueMuscleGroups(exercises: Array<{ muscleGroups?: string[] }>): string[] {
   const allGroups = exercises.flatMap(exercise => 
     exercise.muscleGroups?.map((group: string) => normalizeMuscleGroup(group)) || []
   );

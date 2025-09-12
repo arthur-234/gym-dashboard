@@ -14,7 +14,7 @@ import Link from "next/link";
 import { useWorkout } from "@/contexts/WorkoutContext";
 import { useEffect, useState } from "react";
 
-import { MUSCLE_GROUP_OPTIONS, getUniqueMuscleGroups, normalizeMuscleGroup } from '@/constants/muscleGroups';
+import { MUSCLE_GROUP_OPTIONS, normalizeMuscleGroup } from '@/constants/muscleGroups';
 
 export default function ExercisesPage() {
   const { state, loadExercises, deleteExercise } = useWorkout();

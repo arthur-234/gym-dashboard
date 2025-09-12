@@ -80,26 +80,12 @@ const mockWorkouts: Workout[] = [
 ];
 
 export default function WorkoutAssignment() {
-  const { user, profile } = useAuth();
+  const { profile } = useAuth();
   const [assignments, setAssignments] = useState<UserWorkoutAssignment[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [selectedWorkout, setSelectedWorkout] = useState<string>('');
   const [searchUser, setSearchUser] = useState('');
   const [searchWorkout, setSearchWorkout] = useState('');
-
-  // Verificar se é admin
-  if (profile?.role !== 'admin') {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center text-muted-foreground">
-            <User className="mx-auto h-12 w-12 mb-4" />
-            <p>Acesso restrito a administradores</p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   // Mock assignments - em produção viria de uma API
   useEffect(() => {
@@ -134,6 +120,20 @@ export default function WorkoutAssignment() {
     ];
     setAssignments(mockAssignments);
   }, []);
+
+  // Verificar se é admin
+  if (profile?.role !== 'admin') {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="text-center text-muted-foreground">
+            <User className="mx-auto h-12 w-12 mb-4" />
+            <p>Acesso restrito a administradores</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const handleAssignWorkout = () => {
     if (!selectedUser || !selectedWorkout) return;

@@ -14,7 +14,7 @@ import { useWorkout } from "@/contexts/WorkoutContext";
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Exercise } from "@/types";
-import { MUSCLE_GROUP_OPTIONS, normalizeMuscleGroup } from '@/constants/muscleGroups';
+import { MUSCLE_GROUP_OPTIONS } from '@/constants/muscleGroups';
 
 interface ExerciseForm {
   name: string;
