@@ -120,8 +120,8 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [isAddingExercise, setIsAddingExercise] = useState(false)
-
-
+  const [newAdminName, setNewAdminName] = useState('')
+  const [isPromotingUser, setIsPromotingUser] = useState(false)
   const [newExercise, setNewExercise] = useState<Partial<Exercise>>({
     name: '',
     category: '',
@@ -189,6 +189,35 @@ export default function AdminPage() {
     ))
   }
 
+  const handlePromoteToAdmin = () => {
+    if (!newAdminName.trim()) return
+    
+    const userToPromote = users.find(user => 
+      user.name.toLowerCase().includes(newAdminName.toLowerCase())
+    )
+    
+    if (userToPromote) {
+      setUsers(users.map(user => 
+        user.id === userToPromote.id 
+          ? { ...user, role: 'admin' }
+          : user
+      ))
+      setNewAdminName('')
+      setIsPromotingUser(false)
+      alert(`${userToPromote.name} foi promovido a administrador!`)
+    } else {
+      alert('Usuário não encontrado. Verifique o nome digitado.')
+    }
+  }
+
+  const handleToggleUserRole = (id: string) => {
+    setUsers(users.map(user => 
+      user.id === id 
+        ? { ...user, role: user.role === 'admin' ? 'user' : 'admin' }
+        : user
+    ))
+  }
+
   const addInstruction = () => {
     setNewExercise({
       ...newExercise,
@@ -232,7 +261,7 @@ export default function AdminPage() {
         </div>
 
         <Tabs defaultValue="exercises" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="exercises" className="flex items-center gap-2">
               <Dumbbell className="h-4 w-4" />
               Exercícios
@@ -240,6 +269,10 @@ export default function AdminPage() {
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users className="h-4 w-4" />
               Usuários
+            </TabsTrigger>
+            <TabsTrigger value="workouts" className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              Treinos
             </TabsTrigger>
           </TabsList>
 
@@ -467,9 +500,46 @@ export default function AdminPage() {
             {/* Controles de Usuários */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Gerenciar Usuários
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Gerenciar Usuários
+                  </div>
+                  <Dialog open={isPromotingUser} onOpenChange={setIsPromotingUser}>
+                    <DialogTrigger asChild>
+                      <Button className="flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        Promover Admin
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Promover Usuário a Administrador</DialogTitle>
+                        <DialogDescription>
+                          Digite o nome do usuário que deseja promover a administrador.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <Label htmlFor="adminName">Nome do Usuário</Label>
+                          <Input
+                            id="adminName"
+                            placeholder="Digite o nome do usuário..."
+                            value={newAdminName}
+                            onChange={(e) => setNewAdminName(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex gap-2">
+                          <Button onClick={handlePromoteToAdmin} className="flex-1">
+                            Promover
+                          </Button>
+                          <Button variant="outline" onClick={() => setIsPromotingUser(false)} className="flex-1">
+                            Cancelar
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -515,6 +585,13 @@ export default function AdminPage() {
                             </div>
                           </div>
                           <div className="flex gap-2">
+                            <Button 
+                              variant={user.role === 'admin' ? 'outline' : 'default'} 
+                              size="sm"
+                              onClick={() => handleToggleUserRole(user.id)}
+                            >
+                              {user.role === 'admin' ? 'Remover Admin' : 'Tornar Admin'}
+                            </Button>
                             <Button 
                               variant={user.status === 'active' ? 'destructive' : 'default'} 
                               size="sm"
