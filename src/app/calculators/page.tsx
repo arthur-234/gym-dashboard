@@ -60,7 +60,20 @@ export default function CalculatorsPage() {
     
     const heightInMeters = parseFloat(height) / 100;
     const weightInKg = parseFloat(weight);
+    
+    // Validar se os valores são números válidos
+    if (isNaN(heightInMeters) || isNaN(weightInKg) || heightInMeters <= 0 || weightInKg <= 0) {
+      alert('Por favor, insira valores válidos para altura e peso.');
+      return;
+    }
+    
     const imcValue = weightInKg / (heightInMeters * heightInMeters);
+    
+    // Verificar se o resultado é um número válido
+    if (isNaN(imcValue) || !isFinite(imcValue)) {
+      alert('Erro no cálculo. Verifique os valores inseridos.');
+      return;
+    }
     
     let classification = '';
     let healthRisk = '';
@@ -139,6 +152,13 @@ export default function CalculatorsPage() {
     const weightInKg = parseFloat(weight);
     const ageInYears = parseFloat(age);
     
+    // Validar se os valores são números válidos
+    if (isNaN(heightInCm) || isNaN(weightInKg) || isNaN(ageInYears) || 
+        heightInCm <= 0 || weightInKg <= 0 || ageInYears <= 0) {
+      alert('Por favor, insira valores válidos para altura, peso e idade.');
+      return;
+    }
+    
     let bmrValue: number;
     
     if (gender === 'male') {
@@ -147,6 +167,12 @@ export default function CalculatorsPage() {
     } else {
       // Fórmula de Harris-Benedict para mulheres
       bmrValue = 447.593 + (9.247 * weightInKg) + (3.098 * heightInCm) - (4.330 * ageInYears);
+    }
+    
+    // Verificar se o resultado é um número válido
+    if (isNaN(bmrValue) || !isFinite(bmrValue)) {
+      alert('Erro no cálculo do BMR. Verifique os valores inseridos.');
+      return;
     }
     
     setBmr(bmrValue);
@@ -416,7 +442,7 @@ export default function CalculatorsPage() {
                       <CardContent>
                         <div className="text-center space-y-4">
                           <div className="text-4xl font-bold" style={{ color: result.color }}>
-                             {result.imc.toFixed(1)}
+                             {isNaN(result.imc) ? '0.0' : result.imc.toFixed(1)}
                           </div>
                           <div>
                             <Badge 
@@ -632,7 +658,7 @@ export default function CalculatorsPage() {
                         <Alert>
                           <Apple className="h-4 w-4" />
                           <AlertDescription>
-                            <strong>Meta Calórica Diária:</strong> {dietPlan.targetCalories} calorias
+                            <strong>Meta Calórica Diária:</strong> {isNaN(dietPlan.targetCalories) ? '0' : Math.round(dietPlan.targetCalories)} calorias
                           </AlertDescription>
                         </Alert>
 
@@ -641,15 +667,15 @@ export default function CalculatorsPage() {
                           <div className="grid grid-cols-3 gap-4">
                             <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg text-center">
                               <div className="text-blue-600 dark:text-blue-400 font-semibold text-sm">Proteínas</div>
-                              <div className="text-xl font-bold">{dietPlan.macros.protein}g</div>
+                              <div className="text-xl font-bold">{isNaN(dietPlan.macros.protein) ? '0' : dietPlan.macros.protein}g</div>
                             </div>
                             <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg text-center">
                               <div className="text-green-600 dark:text-green-400 font-semibold text-sm">Carboidratos</div>
-                              <div className="text-xl font-bold">{dietPlan.macros.carbs}g</div>
+                              <div className="text-xl font-bold">{isNaN(dietPlan.macros.carbs) ? '0' : dietPlan.macros.carbs}g</div>
                             </div>
                             <div className="bg-yellow-50 dark:bg-yellow-950/20 p-3 rounded-lg text-center">
                               <div className="text-yellow-600 dark:text-yellow-400 font-semibold text-sm">Gorduras</div>
-                              <div className="text-xl font-bold">{dietPlan.macros.fats}g</div>
+                              <div className="text-xl font-bold">{isNaN(dietPlan.macros.fats) ? '0' : dietPlan.macros.fats}g</div>
                             </div>
                           </div>
                         </div>
