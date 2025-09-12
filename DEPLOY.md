@@ -44,11 +44,23 @@ FRONTEND_URL=https://gym-dashboard-frontend.vercel.app
 
 ## 🌐 Deploy do Backend (Render)
 
-### Passo 1: Preparar Repositório
+### Passo 1: Criar Serviço Backend
 
+**Opção A: Via Dashboard Render**
+1. Acesse [Render Dashboard](https://dashboard.render.com)
+2. Clique "New" → "Web Service"
+3. Conecte seu repositório GitHub
+4. Configure:
+   - **Name**: `gym-dashboard-backend`
+   - **Root Directory**: `server`
+   - **Environment**: `Node`
+   - **Build Command**: `curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH" && bun install`
+   - **Start Command**: `export PATH="$HOME/.bun/bin:$PATH" && bun run server.js`
+
+**Opção B: Via Blueprint (render-backend.yaml)**
 ```bash
-# Commit das mudanças
-git add .
+# Use o arquivo render-backend.yaml fornecido
+```git add .
 git commit -m "feat: backend Socket.IO para produção"
 git push origin main
 ```
