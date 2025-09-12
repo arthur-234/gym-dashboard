@@ -95,6 +95,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user)
       const userProfile = await createUserProfile(user)
       setProfile(userProfile)
+      
+      // Salvar usuário na lista de usuários registrados
+      const storedUsers = localStorage.getItem('registeredUsers')
+      const users = storedUsers ? JSON.parse(storedUsers) : []
+      const newUser = {
+        id: user.id,
+        name: displayName,
+        email: user.username // Usando username como email
+      }
+      users.push(newUser)
+      localStorage.setItem('registeredUsers', JSON.stringify(users))
     } catch (error) {
       console.error('Erro no registro:', error)
       throw error

@@ -9,7 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Trash2, Plus, User, Dumbbell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useWorkout } from '@/contexts/WorkoutContext';
 import { Workout } from '@/types';
+import toast from 'react-hot-toast';
 
 interface UserWorkoutAssignment {
   id: string;
@@ -27,24 +29,39 @@ interface User {
   email: string;
 }
 
-// Mock data - em produção viria de uma API
-const mockUsers: User[] = [];
-
-const mockWorkouts: Workout[] = [];
+// Dados removidos - agora usando dados reais do contexto e localStorage
 
 export default function WorkoutAssignment() {
   const { profile } = useAuth();
+  const { state } = useWorkout();
   const [assignments, setAssignments] = useState<UserWorkoutAssignment[]>([]);
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [selectedWorkout, setSelectedWorkout] = useState<string>('');
   const [searchUser, setSearchUser] = useState('');
   const [searchWorkout, setSearchWorkout] = useState('');
+  const [users, setUsers] = useState<User[]>([]);
 
-  // Mock assignments - em produção viria de uma API
+  // Carregar dados do localStorage
   useEffect(() => {
-    const mockAssignments: UserWorkoutAssignment[] = [];
-    setAssignments(mockAssignments);
+    // Carregar usuários registrados
+    const storedUsers = localStorage.getItem('registeredUsers');
+    if (storedUsers) {
+      setUsers(JSON.parse(storedUsers));
+    }
+    
+    // Carregar atribuições
+    const storedAssignments = localStorage.getItem('workoutAssignments');
+    if (storedAssignments) {
+      setAssignments(JSON.parse(storedAssignments));
+    }
   }, []);
+  
+  // Salvar atribuições no localStorage sempre que mudarem
+  useEffect(() => {
+    if (assignments.length > 0) {
+      localStorage.setItem('workoutAssignments', JSON.stringify(assignments));
+    }
+  }, [assignments]);
 
   // Verificar se é admin
   if (profile?.role !== 'admin') {
@@ -63,10 +80,13 @@ export default function WorkoutAssignment() {
   const handleAssignWorkout = () => {
     if (!selectedUser || !selectedWorkout) return;
 
-    const user = mockUsers.find(u => u.id === selectedUser);
-    const workout = mockWorkouts.find(w => w.id === selectedWorkout);
+    const user = users.find(u => u.id === selectedUser);
+    const workout = state.workouts.find(w => w.id === selectedWorkout);
 
-    if (!user || !workout) return;
+    if (!user || !workout) {
+      toast.error('Usuário ou treino não encontrado');
+      return;
+    }
 
     const newAssignment: UserWorkoutAssignment = {
       id: Date.now().toString(),
@@ -79,12 +99,34 @@ export default function WorkoutAssignment() {
     };
 
     setAssignments(prev => [...prev, newAssignment]);
+    
+    // Salvar no localStorage do usuário específico
+    const userAssignments = localStorage.getItem(`assignedWorkouts_${user.id}`);
+    const currentAssignments = userAssignments ? JSON.parse(userAssignments) : [];
+    const updatedAssignments = [...currentAssignments, workout.id];
+    localStorage.setItem(`assignedWorkouts_${user.id}`, JSON.stringify(updatedAssignments));
+    
     setSelectedUser('');
     setSelectedWorkout('');
+    
+    toast.success(`Treino "${workout.name}" atribuído a ${user.name}`);
   };
 
   const handleRemoveAssignment = (assignmentId: string) => {
+    const assignment = assignments.find(a => a.id === assignmentId);
+    if (!assignment) return;
+    
     setAssignments(prev => prev.filter(a => a.id !== assignmentId));
+    
+    // Remover do localStorage do usuário específico
+    const userAssignments = localStorage.getItem(`assignedWorkouts_${assignment.userId}`);
+    if (userAssignments) {
+      const currentAssignments = JSON.parse(userAssignments);
+      const updatedAssignments = currentAssignments.filter((id: string) => id !== assignment.workoutId);
+      localStorage.setItem(`assignedWorkouts_${assignment.userId}`, JSON.stringify(updatedAssignments));
+    }
+    
+    toast.success(`Atribuição removida: ${assignment.workoutName}`);
   };
 
   const handleStatusChange = (assignmentId: string, newStatus: 'active' | 'completed' | 'paused') => {
@@ -95,11 +137,11 @@ export default function WorkoutAssignment() {
     );
   };
 
-  const filteredUsers = mockUsers.filter(user => 
+  const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchUser.toLowerCase())
   );
 
-  const filteredWorkouts = mockWorkouts.filter(workout => 
+  const filteredWorkouts = state.workouts.filter(workout => 
     workout.name.toLowerCase().includes(searchWorkout.toLowerCase())
   );
 

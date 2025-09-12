@@ -220,58 +220,8 @@ export function WorkoutProvider({ children }: WorkoutProviderProps) {
           completedAt: workout.completedAt ? new Date(workout.completedAt) : undefined
         }));
       } else {
-        // Dados de exemplo apenas na primeira vez
-        workouts = [
-          {
-            id: '1',
-            name: 'Treino de Peito e Tríceps',
-            description: 'Treino focado em peito e tríceps',
-            exercises: [
-              {
-                id: '1',
-                exerciseId: '1',
-                sets: [
-                  { id: '1', reps: 12, weight: 80, restTime: 90, completed: false },
-                  { id: '2', reps: 10, weight: 85, restTime: 90, completed: false },
-                  { id: '3', reps: 8, weight: 90, restTime: 90, completed: false }
-                ],
-                notes: ''
-              }
-            ],
-            duration: 60,
-            difficulty: 'intermediate',
-            tags: ['Peito', 'Tríceps'],
-            category: 'strength',
-            createdAt: new Date('2024-01-15'),
-            updatedAt: new Date('2024-01-15'),
-            completedAt: new Date('2024-01-15')
-          },
-          {
-            id: '2',
-            name: 'Treino de Costas e Bíceps',
-            description: 'Treino focado em costas e bíceps',
-            exercises: [
-              {
-                id: '2',
-                exerciseId: '2',
-                sets: [
-                  { id: '4', reps: 10, weight: 70, restTime: 90, completed: false },
-                  { id: '5', reps: 8, weight: 75, restTime: 90, completed: false }
-                ],
-                notes: ''
-              }
-            ],
-            duration: 55,
-            difficulty: 'beginner',
-            tags: ['Costas', 'Bíceps'],
-            category: 'strength',
-            createdAt: new Date('2024-01-16'),
-            updatedAt: new Date('2024-01-16')
-          }
-        ];
-        
-        // Salvar dados de exemplo no localStorage
-        localStorage.setItem('gym-dashboard-workouts', JSON.stringify(workouts));
+        // Sem treinos padrão - ambiente limpo para produção
+        workouts = [];
       }
       
       setTimeout(() => {

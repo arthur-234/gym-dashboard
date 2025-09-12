@@ -10,22 +10,41 @@ import { Plus, Search, Filter, Dumbbell, Clock, Target, Calendar, MoreVertical, 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useWorkout } from "@/contexts/WorkoutContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { Workout } from "@/types";
+import toast from "react-hot-toast";
 
 export default function WorkoutsPage() {
   const { state, loadWorkouts, deleteWorkout } = useWorkout();
+  const { profile } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'completed' | 'pending'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'created' | 'updated'>('created');
+  const [assignedWorkouts, setAssignedWorkouts] = useState<string[]>([]);
+  
+  const isAdmin = profile?.role === 'admin';
   
   useEffect(() => {
     loadWorkouts();
-  }, [loadWorkouts]);
+    
+    // Carregar treinos atrelados do localStorage para usuários não-admin
+    if (!isAdmin && profile?.id) {
+      const stored = localStorage.getItem(`assignedWorkouts_${profile.id}`);
+      if (stored) {
+        setAssignedWorkouts(JSON.parse(stored));
+      }
+    }
+  }, [loadWorkouts, isAdmin, profile?.id]);
 
   // Filtrar e ordenar treinos
   const filteredWorkouts = state.workouts
     .filter(workout => {
+      // Para usuários não-admin, mostrar apenas treinos atrelados
+      if (!isAdmin && !assignedWorkouts.includes(workout.id)) {
+        return false;
+      }
+      
       const matchesSearch = workout.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            workout.description?.toLowerCase().includes(searchTerm.toLowerCase());
       
@@ -76,12 +95,14 @@ export default function WorkoutsPage() {
           </p>
         </div>
         
-        <Link href="/workouts/create">
-          <Button>
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Treino
-          </Button>
-        </Link>
+        {isAdmin && (
+          <Link href="/workouts/create">
+            <Button variant="outline" className="hover:bg-muted">
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Treino
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Filtros e busca */}
@@ -142,9 +163,9 @@ export default function WorkoutsPage() {
                   : 'Tente ajustar os filtros de busca'
                 }
               </p>
-              {state.workouts.length === 0 && (
+              {state.workouts.length === 0 && isAdmin && (
                 <Link href="/workouts/create">
-                  <Button>
+                  <Button variant="outline" className="hover:bg-muted">
                     <Plus className="h-4 w-4 mr-2" />
                     Criar Primeiro Treino
                   </Button>
