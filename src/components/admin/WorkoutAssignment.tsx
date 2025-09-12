@@ -46,7 +46,19 @@ export default function WorkoutAssignment() {
     // Carregar usuários registrados
     const storedUsers = localStorage.getItem('registeredUsers');
     if (storedUsers) {
-      setUsers(JSON.parse(storedUsers));
+      const parsedUsers = JSON.parse(storedUsers);
+      setUsers(parsedUsers);
+      console.log('Usuários carregados:', parsedUsers); // Debug
+    } else {
+      console.log('Nenhum usuário encontrado no localStorage'); // Debug
+      // Adicionar alguns usuários de exemplo para teste
+      const exampleUsers = [
+        { id: 'user1', name: 'João Silva', email: 'joao@email.com' },
+        { id: 'user2', name: 'Maria Santos', email: 'maria@email.com' },
+        { id: 'user3', name: 'Pedro Costa', email: 'pedro@email.com' }
+      ];
+      setUsers(exampleUsers);
+      localStorage.setItem('registeredUsers', JSON.stringify(exampleUsers));
     }
     
     // Carregar atribuições
@@ -140,10 +152,18 @@ export default function WorkoutAssignment() {
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchUser.toLowerCase())
   );
+  
+  // Debug logs
+  console.log('Total users:', users.length);
+  console.log('Search term:', searchUser);
+  console.log('Filtered users:', filteredUsers.length);
 
   const filteredWorkouts = state.workouts.filter(workout => 
     workout.name.toLowerCase().includes(searchWorkout.toLowerCase())
   );
+  
+  console.log('Total workouts:', state.workouts.length);
+  console.log('Filtered workouts:', filteredWorkouts.length);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -182,15 +202,21 @@ export default function WorkoutAssignment() {
                     <SelectValue placeholder="Selecione um usuário" />
                   </SelectTrigger>
                   <SelectContent>
-                    {filteredUsers.map(user => (
-                      <SelectItem key={user.id} value={user.id}>
-                        <div className="flex items-center gap-2">
-                          <User className="h-4 w-4" />
-                          <span>{user.name}</span>
-                          <span className="text-sm text-muted-foreground">({user.email})</span>
-                        </div>
-                      </SelectItem>
-                    ))}
+                    {filteredUsers.length > 0 ? (
+                      filteredUsers.map(user => (
+                        <SelectItem key={user.id} value={user.id}>
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            <span>{user.name}</span>
+                            <span className="text-sm text-muted-foreground">({user.email})</span>
+                          </div>
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <div className="p-2 text-sm text-muted-foreground text-center">
+                        {users.length === 0 ? 'Nenhum usuário registrado' : 'Nenhum usuário encontrado'}
+                      </div>
+                    )}
                   </SelectContent>
                 </Select>
               </div>
