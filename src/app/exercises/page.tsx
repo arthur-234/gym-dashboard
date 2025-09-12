@@ -67,14 +67,6 @@ export default function ExercisesPage() {
     }
   };
 
-
-      case 'advanced':
-        return 'Avançado';
-      default:
-        return difficulty;
-    }
-  };
-
   return (
     <AppLayout>
       {/* Header com ações */}
