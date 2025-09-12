@@ -12,7 +12,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useWorkout } from '@/contexts/WorkoutContext';
 import { useSocket } from '@/contexts/SocketContext';
 import { userService, UserProfile } from '@/services/userService';
-import { Workout } from '@/types';
 import toast from 'react-hot-toast';
 
 interface UserWorkoutAssignment {

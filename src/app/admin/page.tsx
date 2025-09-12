@@ -588,7 +588,7 @@ export default function AdminPage() {
                               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                   <Clock className="h-4 w-4" />
-                                  Conectado desde {new Date(user.connectedAt).toLocaleTimeString('pt-BR')}
+                                  Conectado desde {user.connectedAt ? new Date(user.connectedAt).toLocaleTimeString('pt-BR') : 'Agora'}
                                 </span>
                               </div>
                             </div>

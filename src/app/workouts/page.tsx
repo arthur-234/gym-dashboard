@@ -13,7 +13,6 @@ import { useWorkout } from "@/contexts/WorkoutContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { Workout } from "@/types";
-import toast from "react-hot-toast";
 
 export default function WorkoutsPage() {
   const { state, loadWorkouts, deleteWorkout } = useWorkout();
