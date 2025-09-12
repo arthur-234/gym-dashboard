@@ -11,6 +11,7 @@ const server = http.createServer(app);
 const corsOptions = {
   origin: [
     'http://localhost:3000',
+    'https://gym-dashboard-eight.vercel.app',
     'https://gym-dashboard-frontend.vercel.app',
     process.env.FRONTEND_URL
   ].filter(Boolean),

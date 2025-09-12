@@ -39,7 +39,7 @@ NEXT_PUBLIC_SOCKET_URL=https://gym-dashboard-backend.onrender.com
 ```env
 NODE_ENV=production
 PORT=10000
-FRONTEND_URL=https://gym-dashboard-frontend.vercel.app
+FRONTEND_URL=https://gym-dashboard-eight.vercel.app
 ```
 
 ## 🌐 Deploy do Backend (Render)

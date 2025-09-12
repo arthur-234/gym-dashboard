@@ -20,7 +20,8 @@ services:
       - key: PORT
         value: 10000
       - key: FRONTEND_URL
-        value: https://gym-dashboard-frontend.vercel.app
+        value: https://gym-dashboard-eight.vercel.app
     healthCheckPath: /health
     autoDeploy: true
     branch: main
+    rootDir: server
