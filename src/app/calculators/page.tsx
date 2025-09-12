@@ -266,13 +266,7 @@ export default function CalculatorsPage() {
     });
   };
 
-  const handleCalculate = () => {
-    calculateIMC();
-    calculateBMR();
-    if (goal && tdee) {
-      calculateDietPlan();
-    }
-  };
+
 
   const resetCalculator = () => {
     setHeight('');

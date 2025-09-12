@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, Filter, Target, MoreVertical, Edit, Trash2, Info, Dumbbell } from "lucide-react";
-import { exerciseDatabase, getExercisesByMuscleGroup, searchExercises } from '@/data/exerciseDatabase'
+import { Plus, Search, Filter, Target, MoreVertical, Edit, Trash2, Info } from "lucide-react";
+import { searchExercises } from '@/data/exerciseDatabase'
 import { ExerciseImage } from '@/components/ui/exercise-image'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 import { useWorkout } from "@/contexts/WorkoutContext";
 import { useEffect, useState } from "react";
-import { Exercise } from "@/types";
+
 import { MUSCLE_GROUP_OPTIONS, getUniqueMuscleGroups, normalizeMuscleGroup } from '@/constants/muscleGroups';
 
 export default function ExercisesPage() {
@@ -27,9 +27,7 @@ export default function ExercisesPage() {
     loadExercises();
   }, [loadExercises]);
 
-  // Obter categorias e grupos musculares únicos
-  const categories = getUniqueMuscleGroups(state.exercises);
-  const muscleGroups = getUniqueMuscleGroups(state.exercises);
+
 
   // Filtrar e ordenar exercícios
   const filteredExercises = state.exercises
@@ -69,25 +67,7 @@ export default function ExercisesPage() {
     }
   };
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'bg-green-100 text-green-800';
-      case 'intermediate':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'advanced':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
-  const getDifficultyLabel = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner':
-        return 'Iniciante';
-      case 'intermediate':
-        return 'Intermediário';
       case 'advanced':
         return 'Avançado';
       default:

@@ -96,7 +96,7 @@ export default function EditWorkoutPage() {
       });
     }
     setIsLoadingWorkout(false);
-  }, [state.workouts, workoutId]);
+  }, [state.workouts, state.exercises, workoutId]);
 
   // Filtrar exercícios disponíveis
   const filteredExercises = state.exercises.filter(exercise => {
@@ -138,7 +138,7 @@ export default function EditWorkoutPage() {
   const updateExercise = (index: number, field: keyof WorkoutExercise, value: number) => {
     setForm(prev => {
       const newExercises = [...prev.exercises];
-      (newExercises[index] as any)[field] = value;
+      newExercises[index] = { ...newExercises[index], [field]: value };
       return { ...prev, exercises: newExercises };
     });
   };

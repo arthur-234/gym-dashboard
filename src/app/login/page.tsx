@@ -38,8 +38,8 @@ export default function LoginPage() {
         await signIn(username, password)
       }
       router.push('/')
-    } catch (error: any) {
-      setError(error.message || 'Erro na autenticação')
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Erro na autenticação')
     } finally {
       setIsLoading(false)
     }
@@ -56,8 +56,8 @@ export default function LoginPage() {
       setResetToken('')
       setNewPassword('')
       alert('Senha resetada com sucesso!')
-    } catch (error: any) {
-      setError(error.message || 'Erro ao resetar senha')
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Erro ao resetar senha')
     } finally {
       setIsLoading(false)
     }

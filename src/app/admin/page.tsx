@@ -2,16 +2,16 @@
 
 import { useState } from 'react'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+
 import FileUpload from '@/components/FileUpload'
 import { 
   Users, 
@@ -21,9 +21,6 @@ import {
   Trash2, 
   Search,
   Shield,
-  Activity,
-  Calendar,
-  Target,
   Clock,
   CheckCircle
 } from 'lucide-react'
@@ -122,7 +119,7 @@ export default function AdminPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [isAddingExercise, setIsAddingExercise] = useState(false)
-  const [editingExercise, setEditingExercise] = useState<Exercise | null>(null)
+
 
   const [newExercise, setNewExercise] = useState<Partial<Exercise>>({
     name: '',
@@ -306,7 +303,7 @@ export default function AdminPage() {
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="difficulty">Dificuldade</Label>
-                            <Select value={newExercise.difficulty} onValueChange={(value: any) => setNewExercise({ ...newExercise, difficulty: value })}>
+                            <Select value={newExercise.difficulty} onValueChange={(value: 'Iniciante' | 'Intermediário' | 'Avançado') => setNewExercise({ ...newExercise, difficulty: value })}>
                               <SelectTrigger>
                                 <SelectValue />
                               </SelectTrigger>
