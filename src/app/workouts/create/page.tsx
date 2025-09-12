@@ -209,7 +209,7 @@ export default function CreateWorkoutPage() {
   };
 
   return (
-    <ProtectedRoute>
+    <ProtectedRoute requireAdmin={true}>
       <AppLayout>
       <div className="max-w-7xl mx-auto">
         {/* Header */}

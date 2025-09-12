@@ -14,6 +14,8 @@ interface UserData {
   username: string;
   displayName: string;
   role: string;
+  connectedAt?: Date;
+  id?: string;
 }
 
 interface WorkoutData {
@@ -28,7 +30,7 @@ interface WorkoutData {
 interface SocketContextType {
   socket: Socket | null;
   isConnected: boolean;
-  onlineUsers: string[];
+  onlineUsers: UserData[];
   sendMessage: (event: string, data: SocketMessage) => void;
   joinRoom: (roomId: string) => void;
   leaveRoom: (roomId: string) => void;
@@ -43,7 +45,7 @@ interface SocketProviderProps {
 export function SocketProvider({ children }: SocketProviderProps) {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<UserData[]>([]);
   const { profile } = useAuth();
 
   useEffect(() => {
@@ -82,8 +84,12 @@ export function SocketProvider({ children }: SocketProviderProps) {
     });
 
     // Eventos de usuários online
-    socketInstance.on('users_online', (users: string[]) => {
-      setOnlineUsers(users);
+    socketInstance.on('users_online', (users: UserData[]) => {
+      setOnlineUsers(users.map(user => ({
+        ...user,
+        connectedAt: user.connectedAt ? new Date(user.connectedAt) : new Date(),
+        id: user.userId
+      })));
     });
 
     socketInstance.on('user_joined', (userData: UserData) => {
