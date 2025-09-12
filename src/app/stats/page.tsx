@@ -100,7 +100,8 @@ function calculateWorkoutStats(workouts: Workout[], exercises: Exercise[]) {
     {
       title: 'Primeiro Treino',
       description: 'Complete seu primeiro treino',
-      completed: totalWorkouts > 0
+      completed: totalWorkouts > 0,
+      progress: totalWorkouts > 0 ? 100 : 0
     },
     {
       title: 'Consistência Semanal',
@@ -349,7 +350,7 @@ export default function StatsPage() {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, percent }: { name: string; percent: number }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, percent }: any) => `${name} ${(percent * 100).toFixed(0)}%`}
                       outerRadius={120}
                       fill="#8884d8"
                       dataKey="value"
