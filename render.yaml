@@ -7,6 +7,7 @@ services:
     buildCommand: |
       curl -fsSL https://bun.sh/install | bash
       export PATH="$HOME/.bun/bin:$PATH"
+      cd server
       bun install
       bun run build
     startCommand: |
@@ -32,6 +33,7 @@ services:
       bun install
     startCommand: |
       export PATH="$HOME/.bun/bin:$PATH"
+      cd server
       bun run server.js
     envVars:
       - key: NODE_ENV
