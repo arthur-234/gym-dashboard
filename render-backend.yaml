@@ -6,14 +6,12 @@ services:
     plan: free
     repo: https://github.com/arthur-234/gym-dashboard
     buildCommand: |
-      cd server
       curl -fsSL https://bun.sh/install | bash
       export PATH="$HOME/.bun/bin:$PATH"
       bun install
     startCommand: |
-      cd server
       export PATH="$HOME/.bun/bin:$PATH"
-      bun run server.js
+      bun server.js
     envVars:
       - key: NODE_ENV
         value: production
