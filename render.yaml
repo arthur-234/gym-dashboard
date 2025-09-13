@@ -33,7 +33,6 @@ services:
       bun install
     startCommand: |
       export PATH="$HOME/.bun/bin:$PATH"
-      cd server
       bun server.js
     envVars:
       - key: NODE_ENV
