@@ -11,7 +11,7 @@ services:
       bun install
     startCommand: |
       export PATH="$HOME/.bun/bin:$PATH"
-      bun run server.js
+      bun server.js
     envVars:
       - key: NODE_ENV
         value: production
