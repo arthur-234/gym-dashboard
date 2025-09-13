@@ -3,8 +3,8 @@ services:
     name: gym-dashboard-backend
     env: node
     plan: free
-    buildCommand: curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH" && cd server && bun install
-    startCommand: export PATH="$HOME/.bun/bin:$PATH" && cd server && bun run server.js
+    buildCommand: curl -fsSL https://bun.sh/install | bash && export PATH="$HOME/.bun/bin:$PATH" && bun install
+    startCommand: export PATH="$HOME/.bun/bin:$PATH" && bun run server.js
     envVars:
       - key: NODE_ENV
         value: production

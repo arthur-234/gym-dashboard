@@ -1,0 +1,48 @@
+services:
+  # Frontend Next.js
+  - type: web
+    name: gym-dashboard-frontend
+    env: node
+    plan: free
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+      bun run build
+    startCommand: |
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://gym-dashboard-backend.onrender.com
+    autoDeploy: true
+    branch: main
+
+  # Backend Socket.IO
+  - type: web
+    name: gym-dashboard-backend
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun install
+    startCommand: |
+      export PATH="$HOME/.bun/bin:$PATH"
+      bun run server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: gym-dashboard-backend
+          property: port
+      - key: FRONTEND_URL
+        value: https://gym-dashboard-frontend.onrender.com
+    healthCheckPath: /health
+    autoDeploy: true
+    branch: main
